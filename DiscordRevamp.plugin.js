@@ -13,7 +13,7 @@ var DiscordRevamp = (() => {
 			name: "Discord Revamp",
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}],
 			description: "Revamps Discord and will add more features in the future.",
-			version: "0.1.1",
+			version: "0.1.2",
 			github: "https://github.com/FridyGruder/Discord-Revamp",
 			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
@@ -47,9 +47,9 @@ var DiscordRevamp = (() => {
 		],
 		changelog:[
 			{
-				"title": "Added",
-				"type": "added",
-				"items": ["Added a setting menu.", "Added 3 new border ready to be used."]
+				"title": "Fixed",
+				"type": "fixed",
+				"items": ["Changed the animation speed of the Pastal Rainbow border."]
 			}
 		]
 	};
@@ -151,7 +151,7 @@ var DiscordRevamp = (() => {
 										};
 									}
 									else if(this.settings.borders === 2){
-										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 										elem.style.top = "1px";
 										elem.style.left = "15px";
 										elem.style.width = "42px";
@@ -214,7 +214,7 @@ var DiscordRevamp = (() => {
 										};
 									}
 									else if(this.settings.borders === 2){
-										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 										elem.style.top = "23px";
 										elem.style.left = "15px";
 										elem.style.width = "42px";
@@ -304,7 +304,7 @@ var DiscordRevamp = (() => {
 										};
 									}
 									else if(this.settings.borders === 2){
-										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 										elem.style.position = "absolute";
 										elem.style.top = "19px";
 										elem.style.left = "19px";
@@ -382,7 +382,7 @@ var DiscordRevamp = (() => {
 							};
 						}
 						else if(this.settings.borders === 2){
-							elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 							elem.style.top = "-2px";
 							elem.style.left = "-2px";
 							elem.style.width = "84px";
