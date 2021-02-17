@@ -2,9 +2,9 @@
  * @name DiscordRevamp
  * @displayName DiscordRevamp
  * @authorId 333357946744602647
- * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers
- * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
- * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
+ * @website https://github.com/FridyGruder/Discord-Revamp
+ * @source https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js
  */
 
 var DiscordRevamp = (() => {
@@ -14,8 +14,8 @@ var DiscordRevamp = (() => {
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}],
 			description: "Revamps Discord and will add more features in the future.",
 			version: "0.1.1",
-			github: "",
-			github_raw: ""
+			github: "https://github.com/FridyGruder/Discord-Revamp",
+			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
 		defaultConfig: [
 			{
