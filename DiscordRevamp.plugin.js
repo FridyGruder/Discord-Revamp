@@ -1,0 +1,432 @@
+/**
+ * @name DiscordRevamp
+ * @displayName DiscordRevamp
+ * @authorId 333357946744602647
+ * @website https://github.com/mwittrien/BetterDiscordAddons/tree/master/Plugins/EditUsers
+ * @source https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Plugins/EditUsers/EditUsers.plugin.js
+ */
+
+var DiscordRevamp = (() => {
+	const config = {
+		info:{
+			name: "Discord Revamp",
+			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}],
+			description: "Revamps Discord and will add more features in the future.",
+			version: "0.1.1",
+			github: "",
+			github_raw: ""
+		},
+		defaultConfig: [
+			{
+				type: "dropdown",
+				id: "borders",
+				name: "Border",
+				note: "Select which border you want to apply.",
+				value: 0,
+				options: [
+					{ label: 'Rainbow', value: 0 },
+					{ label: 'Shining', value: 1 },
+					{ label: 'Pastel Rainbow', value: 2 }
+				]
+			},
+			{
+				type: "switch",
+				id: "self",
+				name: "Self Border Only",
+				note: "Choose if you want the borders to be applied to everyone or on yourself only.",
+				value: false
+			},
+			{
+				type: "switch",
+				id: "glow",
+				name: "Border Glow",
+				note: "Choose if you want glow around your border to appear.",
+				value: true
+			}
+		],
+		changelog:[
+			{
+				"title": "Added",
+				"type": "added",
+				"items": ["Added a setting menu.", "Added 3 new border ready to be used."]
+			}
+		]
+	};
+	
+	var ownID;
+	
+	return !global.ZeresPluginLibrary ? class {
+		constructor(){this._config = config;}
+		getName(){return config.info.name;}
+		getAuthor(){return config.info.authors.map(a => a.name).join(", ");}
+		getDescription(){return config.info.description;}
+		getVersion(){return config.info.version;}
+		load(){
+			BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
+				confirmText: "Download Now",
+				cancelText: "Cancel",
+				onConfirm: () => {
+					require("request").get("https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js", async (error, response, body) => {
+						if (error) return require("electron").shell.openExternal("https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js");
+						await new Promise(r => require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0PluginLibrary.plugin.js"), body, r));
+					});
+				}
+		});
+		}
+		start(){
+			ownID = document.getElementsByClassName("avatar-VxgULZ")[0].src.split("/")[4];
+		}
+		stop(){}
+	} : (([Plugin, Api]) => {
+		const plugin = (Plugin, Api) => {
+			const { WebpackModules, DiscordModules, Patcher, ReactComponents, PluginUtilities, Utilities } = Api;
+			const { React, ChannelStore, UserStore, UserTypingStore, RelationshipStore, SelectedGuildStore, DiscordConstants, WindowInfo } = DiscordModules;
+			const Flux = WebpackModules.getByProps("connectStores");
+			const MutedStore = WebpackModules.getByProps("isMuted", "isChannelMuted");
+			const Spinner = WebpackModules.getByDisplayName("Spinner");
+			const Tooltip = WebpackModules.getByDisplayName("Tooltip");
+			
+			
+			return class DiscordRevamp extends Plugin {
+				
+				observer(e) {
+		
+					/*let borders = [
+						{
+							Source: "https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif",
+							Glow: [
+								{
+									Size: "5",
+									Color: ""
+								}
+							]
+						}
+					]*/
+		
+					ownID = document.getElementsByClassName("avatar-SmRMf2")[0].children[0].children[0].children[0].src.split("/")[4];
+		
+					var x = document.getElementsByClassName("groupStart-23k01U");
+					for (var i = 0; i < x.length; i++) {
+						var userID = x[i].getAttribute("user_by_bdfdb");
+						var bord = x[i].getAttribute("border");
+						var classes = x[i].classList;
+						var children = x[i].children;
+						var isSystemMessage = false;
+						var isReply = false;
+						if(!bord ){
+							for (var e = 0; e < children.length; e++) {
+								var ChildClasses = children[e].classList;
+								for (var o = 0; o < ChildClasses.length; o++) {
+									if(ChildClasses[o] === "repliedMessage-VokQwo"){
+										isReply = true;
+									};
+								};
+							};
+							for (var e = 0; e < classes.length; e++) {
+								if(classes[e] === "da-systemMessage"){
+									isSystemMessage = true;
+								}
+							};
+								if(!isSystemMessage && !isReply){
+									var elem = document.createElement("img");
+									if(this.settings.borders === 0){
+										elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
+										elem.style.top = "1px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(255, 102, 196), 0 0 15px rgb(255, 38, 172)";
+										};
+									}
+									else if(this.settings.borders === 1){
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
+										elem.style.top = "1px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(255, 255, 255), 0 0 15px rgb(255, 255, 255)";
+										};
+									}
+									else if(this.settings.borders === 2){
+										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.style.top = "1px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									else if(this.settings.borders === 3){
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811109408624476190/NicePng_borders-png_80607.png';
+										elem.style.top = "1px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									else if(this.settings.borders === 4){
+										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.style.top = "1px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									elem.setAttribute("class", "avatar-1BDn8e da-avatar");
+									if(this.settings.self === true){
+										if(userID === ownID){
+											x[i].appendChild(elem);
+										}
+									}
+									else{
+										x[i].appendChild(elem);
+									}
+									x[i].setAttribute("border", "true");
+								}
+								else if(!isSystemMessage){
+									var elem = document.createElement("img");
+									if(this.settings.borders === 0){
+										elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
+										elem.style.top = "23px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(255, 102, 196), 0 0 15px rgb(255, 38, 172)";
+										};
+									}
+									else if(this.settings.borders === 1){
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
+										elem.style.top = "23px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(255, 255, 255), 0 0 15px rgb(255, 255, 255)";
+										};
+									}
+									else if(this.settings.borders === 2){
+										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.style.top = "23px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									else if(this.settings.borders === 3){
+										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.style.top = "23px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									else if(this.settings.borders === 4){
+										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.style.top = "23px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									elem.setAttribute("class", "avatar-1BDn8e da-avatar");
+									if(this.settings.self === true){
+										if(userID === ownID){
+											x[i].appendChild(elem);
+										}
+									}
+									else{
+										x[i].appendChild(elem);
+									}
+									x[i].setAttribute("border", "true");
+								}
+						};
+					};
+					
+					var vc = document.getElementsByClassName("callAvatarMask-1SLlRi");
+					var vcbord = document.getElementsByClassName("border-Jn5IOt");
+					for (var i = 0; i < vcbord.length; i++) {
+						var checked = vcbord[i].getAttribute("checked");
+						if(!checked){
+							vcbord[i].style.width = "40px";
+							vcbord[i].style.height = "40px";
+							vcbord[i].style.top = "20px";
+							vcbord[i].style.left = "20px";
+							vcbord[i].style.position = "absolute";
+							vcbord[i].parentElement.parentElement.parentElement.parentElement.style.transform = "scale(2)";
+							vcbord[i].parentElement.children[0].style.width = "40px";
+							vcbord[i].parentElement.children[0].style.height = "40px";
+							vcbord[i].parentElement.children[0].style.top = "20px";
+							vcbord[i].parentElement.children[0].style.left = "20px";
+							vcbord[i].parentElement.children[0].style.position = "absolute";
+							vcbord[i].setAttribute("checked", "true");
+						}
+					}
+					for (var i = 0; i < vc.length; i++) {
+						var userID = vc[i].children[0].children[0].getAttribute("src").split("/")[4];
+						var bord = vc[i].getAttribute("border");
+						if(!bord ){
+									var elem = document.createElement("img");
+									if(this.settings.borders === 0){
+										elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
+										elem.style.position = "absolute";
+										elem.style.top = "19px";
+										elem.style.left = "19px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(255, 102, 196), 0 0 15px rgb(255, 38, 172)";
+										};
+									}
+									else if(this.settings.borders === 1){
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
+										elem.style.position = "absolute";
+										elem.style.top = "19px";
+										elem.style.left = "19px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(255, 255, 255), 0 0 15px rgb(255, 255, 255)";
+										};
+									}
+									else if(this.settings.borders === 2){
+										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.style.position = "absolute";
+										elem.style.top = "19px";
+										elem.style.left = "19px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									else if(this.settings.borders === 3){
+										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811109408624476190/NicePng_borders-png_80607.png';
+										elem.style.top = "1px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									else if(this.settings.borders === 4){
+										elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+										elem.style.top = "1px";
+										elem.style.left = "15px";
+										elem.style.width = "42px";
+										elem.style.height = "42px";
+										if(this.settings.glow){
+											elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+										};
+									}
+									elem.setAttribute("class", "voiceAvatar-14IynY da-voiceAvatar");
+									if(this.settings.self === true){
+										if(userID === ownID){
+											vc[i].children[0].appendChild(elem);
+										}
+									}
+									else{
+										vc[i].children[0].appendChild(elem);
+									}
+									vc[i].setAttribute("border", "true");
+						};
+					};
+					
+					var st = document.getElementsByClassName("avatarUploaderInner-3UNxY3")[0];
+					if(st){
+						var bord = st.getAttribute("border");
+						var children = st.children;
+						var id = st.style.backgroundImage.split("/")[4];
+						var elem = document.createElement("img");
+						for (var i = 0; i < children.length; i++){
+							var classlist = children[i].classList;
+							for (var o = 0; o < classlist.length; o++){
+								if(classlist[o] === "avatarUploaderIndicator-2G-aIZ"){
+									children[i].style.zIndex = 1;
+								}
+							}
+						}
+						if(this.settings.borders === 0){
+							elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
+							elem.style.top = "-2px";
+							elem.style.left = "-2px";
+							elem.style.width = "84px";
+							elem.style.height = "84px";
+							if(this.settings.glow){
+								elem.style.boxShadow = "0 0 10px rgb(255, 102, 196), 0 0 30px rgb(255, 38, 172)";
+							};
+						}
+						else if(this.settings.borders === 1){
+							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
+							elem.style.top = "-2px";
+							elem.style.left = "-2px";
+							elem.style.width = "84px";
+							elem.style.height = "84px";
+							if(this.settings.glow){
+								elem.style.boxShadow = "0 0 10px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255)";
+							};
+						}
+						else if(this.settings.borders === 2){
+							elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+							elem.style.top = "-2px";
+							elem.style.left = "-2px";
+							elem.style.width = "84px";
+							elem.style.height = "84px";
+							if(this.settings.glow){
+								elem.style.boxShadow = "0 0 10px rgb(182, 133, 255), 0 0 30px rgb(124, 36, 255)";
+							};
+						}
+						else if(this.settings.borders === 3){
+							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811109408624476190/NicePng_borders-png_80607.png';
+							elem.style.top = "1px";
+							elem.style.left = "15px";
+							elem.style.width = "42px";
+							elem.style.height = "42px";
+							if(this.settings.glow){
+								elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+							};
+						}
+						else if(this.settings.borders === 4){
+							elem.src = 'https://i.pinimg.com/originals/7f/a2/b1/7fa2b14f1b65ab8a54062e7c24546ca6.gif';
+							elem.style.top = "-2px";
+							elem.style.left = "-2px";
+							elem.style.width = "84px";
+							elem.style.height = "84px";
+							if(this.settings.glow){
+								elem.style.boxShadow = "0 0 5px rgb(182, 133, 255), 0 0 15px rgb(124, 36, 255)";
+							};
+						}
+						elem.style.backgroundColor = "transparent";
+						elem.style.zIndex = "0";
+						elem.setAttribute("class", "avatarUploaderInner-3UNxY3 da-avatarUploaderInner avatarUploaderInner-2EvNMg da-avatarUploaderInner");
+						if(!bord){
+							st.appendChild(elem);
+						}
+						st.setAttribute("border", "true");
+					}
+					
+				};
+				
+				getSettingsPanel(){
+					return this.buildSettingsPanel().getElement();
+				}
+			};
+		};
+		return plugin(Plugin, Api);
+	})(global.ZeresPluginLibrary.buildPlugin(config));
+})();
