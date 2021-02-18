@@ -13,7 +13,7 @@ var DiscordRevamp = (() => {
 			name: "Discord Revamp",
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}],
 			description: "Revamps Discord and will add more features in the future.",
-			version: "0.1.6",
+			version: "0.1.7",
 			github: "https://github.com/FridyGruder/Discord-Revamp",
 			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
@@ -56,13 +56,36 @@ var DiscordRevamp = (() => {
 				name: "Glow Color",
 				note: "Choose the color of your glowing effect. (Has to be a hex color. Don't forget to include '#'.)",
 				value: "#FFFFFF"
+			},
+			{
+				type: 'category',
+				id: 'options',
+				name: 'Border On Other Users.',
+				collapsible: true,
+				shown: true,
+				settings: [
+					{
+						type: "switch",
+						id: "other",
+						name: "Apply Border On Specific Users",
+						note: "Choose if you want the border to be applied on other specific users. (This is overridden by the self border setting.)",
+						value: false
+					},
+					{
+						type: "textbox",
+						id: "ids",
+						name: "User IDs",
+						note: "Choose on who the border will be applied. (Only user IDs will work. Separate each ID with commas.)",
+						value: ""
+					}
+				]
 			}
 		],
 		changelog:[
 			{
-				"title": "Fixed",
-				"type": "fixed",
-				"items": ["Fixed glow glitch with the fire borders."]
+				"title": "Added",
+				"type": "added",
+				"items": ["Added settings to apply border on other specific users."]
 			}
 		]
 	};
@@ -77,7 +100,7 @@ var DiscordRevamp = (() => {
 		getVersion(){return config.info.version;}
 		load(){
 			BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
-				confirmText: "Download Now",
+				confirmText: "Download",
 				cancelText: "Cancel",
 				onConfirm: () => {
 					require("request").get("https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js", async (error, response, body) => {
@@ -87,7 +110,7 @@ var DiscordRevamp = (() => {
 				}
 			});
 			BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
-				confirmText: "Download Now",
+				confirmText: "Download",
 				cancelText: "Cancel",
 				onConfirm: () => {
 					require("request").get("https://raw.githubusercontent.com/mwittrien/BetterDiscordAddons/master/Library/0BDFDB.plugin.js", async (error, response, body) => {
@@ -245,7 +268,16 @@ var DiscordRevamp = (() => {
 											x[i].appendChild(elem);
 										}
 									}
+									else if(this.settings.options.other){
+										var ids = this.settings.options.ids.replace(/ /g, "").split(",");
+										for (var t = 0; t < ids.length; t++){
+											if(ids[t] === userID){
+												x[i].appendChild(elem);
+											}
+										}
+									}
 									else{
+										console.log("Border");
 										x[i].appendChild(elem);
 									}
 									x[i].setAttribute("border", "true");
@@ -389,6 +421,14 @@ var DiscordRevamp = (() => {
 									if(this.settings.self === true){
 										if(userID === ownID){
 											x[i].appendChild(elem);
+										}
+									}
+									else if(this.settings.options.other){
+										var ids = this.settings.options.ids.replace(/ /g, "").split(",");
+										for (var t = 0; t < ids.length; t++){
+											if(ids[t] === userID){
+												x[i].appendChild(elem);
+											}
 										}
 									}
 									else{
@@ -546,6 +586,14 @@ var DiscordRevamp = (() => {
 											vc[i].children[0].appendChild(elem);
 										}
 									}
+									else if(this.settings.options.other){
+										var ids = this.settings.options.ids.replace(/ /g, "").split(",");
+										for (var t = 0; t < ids.length; t++){
+											if(ids[t] === userID){
+												vc[i].children[0].appendChild(elem);
+											}
+										}
+									}
 									else{
 										vc[i].children[0].appendChild(elem);
 									}
@@ -681,6 +729,14 @@ var DiscordRevamp = (() => {
 												if(this.settings.self === true){
 													if(userID === ownID){
 														vc2[i].children[0].appendChild(elem);
+													}
+												}
+												else if(this.settings.options.other){
+													var ids = this.settings.options.ids.replace(/ /g, "").split(",");
+													for (var t = 0; t < ids.length; t++){
+														if(ids[t] === userID){
+															vc2[i].children[0].appendChild(elem);
+														}
 													}
 												}
 												else{
