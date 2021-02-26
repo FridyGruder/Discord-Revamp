@@ -18,15 +18,15 @@
 
 ## Features :
 
-* Custom profile borders (images and gifs supports), and glow effect.
-* Custom profile backgrounds (images and gifs supports).
-* Custom Discord color.
+* <b>Custom profile borders</b> (images and gifs supports), and <b>glow effect</b>.
+* <b>Custom profile backgrounds</b> (images and gifs supports).
+* <b>Custom Discord color</b>.
 
 ## Contact :
 
-Friddy's Discord : Friddy#0001
+Fridy's Discord : <b>Fridy#0001</b>
 <br />
-Twachx's Discord : Twachx#0420
+Twachx's Discord : <b>Twachx#0420</b>
 
 ## Credits :
 
