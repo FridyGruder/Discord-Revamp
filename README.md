@@ -11,7 +11,9 @@
     <br />
     Made by Fridy & Twachx.
     <br />
-    <a href="https://github.com/FridyGruder/Discord-Revamp/blob/main/DiscordRevamp.plugin.js"><strong>Download</strong></a>
+    <a href="https://github.com/FridyGruder/Discord-Revamp/blob/main/DiscordRevamp.plugin.js">
+    <br />
+    <strong>Download</strong></a>
     <br />
   </p>
 </p>
