@@ -11,7 +11,7 @@
     <br />
     Made by Fridy & Twachx.
     <br />
-    <a href="https://github.com/Metalloriff/BetterDiscordPlugins/blob/master/DetailedServerTooltips.plugin.js"><strong>Download</strong></a>
+    <a href="https://github.com/FridyGruder/Discord-Revamp/blob/main/DiscordRevamp.plugin.js"><strong>Download</strong></a>
     <br />
   </p>
 </p>
