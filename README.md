@@ -20,7 +20,7 @@
 
 * <b>Custom profile borders</b> (images and gifs supports), and <b>glow effect</b>.
 * <b>Custom profile backgrounds</b> (images and gifs supports).
-* <b>Custom Discord color</b>.
+* <b>Custom Discord recolor</b>.
 
 ## Contact :
 
