@@ -16,14 +16,18 @@
   </p>
 </p>
 
+## Features :
+
+* Custom profile borders (images and gifs supports), and glow effect.
+* Custom profile backgrounds (images and gifs supports).
+* Custom Discord color.
+
 ## Contact :
 
 Friddy's Discord : Friddy#0001
 <br />
 Twachx's Discord : Twachx#0420
 
-## Features :
+## Credits :
 
-* Custom profile borders (images and gifs supports), and glow effect.
-* Custom profile backgrounds (images and gifs supports).
-* Custom Discord color.
+* <a href="https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BlurpleRecolor/">Blurple Recolor by mwittrien.</a>
