@@ -13,7 +13,7 @@ var DiscordRevamp = (() => {
 			name: "Discord Revamp",
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}, {name: "Twachx", github_username: "Twackx", discord_id: "155773083196588033"}],
 			description: "Revamps Discord and will add more features in the future.",
-			version: "0.2.4",
+			version: "0.3.0",
 			github: "https://github.com/FridyGruder/Discord-Revamp",
 			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
@@ -93,7 +93,7 @@ var DiscordRevamp = (() => {
             {
                 type: 'category',
                 id: 'profile',
-                name: 'Profile Background',
+                name: 'Profile',
                 collapsible: true,
                 shown: false,
                 settings: [
@@ -116,6 +116,13 @@ var DiscordRevamp = (() => {
                         name:"Custom Background",
                         note:"You can apply any custom picture for the background. (Has to be an URL.)",
                         value:""
+                    },
+                    {
+                        type: "switch",
+                        id: "steam",
+                        name: "Steam Profile",
+                        note: "Choose if you want other's profile to be their steam profile, border included. (This may lag low-end PCs.)",
+                        value: false
                     }
                 ]
             },
@@ -135,6 +142,7 @@ var DiscordRevamp = (() => {
                         options: [
                             { name: 'Basic Color', value: 0 },
                             { name: "Custom Color", value: 1 },
+                            //{ name: "RGB Color", value: 2 },
                         ]
                     },
                     {
@@ -144,19 +152,67 @@ var DiscordRevamp = (() => {
                         note: "Recolor the basic color of Discord. (Only works with custom color setting.)",
                         value: "#00B0F4"
                     },
+					{
+                        type: "textbox",
+                        id: "rgbspeed",
+                        name: "RGB Mode Speed",
+                        note: "Define the speed of the RGB color.",
+                        value: "5"
+                    }
                 ]
-            }
+            },
+			{
+                type: 'category',
+                id: 'logo',
+                name: 'Discord Logo',
+                collapsible: true,
+                shown: false,
+                settings: [
+                    {
+                        type: "radio",
+                        id: "discordlogo",
+                        name: "Discord Logo",
+                        note: "Choose your Discord logo.",
+                        value: 1,
+                        options: [
+                            { name: "Basic", value: 0 },
+                            { name: "Discord Revamp", value: 1 }, //https://i.ibb.co/tzbgNpH/Discord-Revamp-Logo.png
+                            { name: "Happy", value: 2 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-Smile-810231231
+                            { name: "Sad", value: 3 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-Sad-810232683
+                            { name: "Angry", value: 4 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-Angry-810232482
+                            { name: "Gentleman", value: 5 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-Gentleman-810419866
+                            { name: "Annoyed", value: 6 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-Annoyed-810420229
+                            { name: "UwU", value: 7 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-uwu-810231538
+                            //{ name: "Custom", value: 8 } //- Not yet implemented. -//
+                        ]
+                    }
+                    // {
+                    //     type:"textbox",
+                    //     id:"customLogo",
+                    //     name:"Custom Logo",
+                    //     note:"Choose your own Discord logo. (Has to be an URL.)",
+                    //     value:""
+                    // }
+                ]
+            },
         ],
 		changelog:[
 			{
 				"title": "Added",
 				"type": "added",
-				"items": ["New settings to change the color of the Discord."]
+				"items": ["Added Steam profiles setting. You can now see people's steam profile directly on their Discord profile! (In Beta phase.)", "Added Discord logo setting. (More features coming soon!)"]
+			},
+			{
+				"title": "Fixed",
+				"type": "fixed",
+				"items": ["Fixed visual bugs with the status hint.", "Fixed minor general bugs and optimized the plugin."]
 			}
 		]
 	};
 	
 	var ownID;
+	var request = require("request");
+	var started = false;
 	
 	return !global.ZeresPluginLibrary ? class {
 		constructor(){this._config = config;}
@@ -203,6 +259,8 @@ var DiscordRevamp = (() => {
 			return class DiscordRevamp extends Plugin {
 				
 				observer(e) {
+
+					var found = false;
 					
 					var hex = "#FFFFFF"
 
@@ -215,10 +273,11 @@ var DiscordRevamp = (() => {
 					if(/^#[0-9A-F]{6}$/i.test(this.settings.border.color)){
 						hex = this.settings.border.color;
 					};
+
 					var head  = document.getElementsByTagName('head')[0];
 
 					if(this.settings.recolor.recolormode === 1){
-						var cssId = 'css';
+						var cssId = 'cssRecolor';
 						if (!document.getElementById(cssId))
 						{
 							var link  = document.createElement('link');
@@ -228,6 +287,11 @@ var DiscordRevamp = (() => {
 							link.href = 'https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css';
 							link.media = 'all';
 							head.appendChild(link);
+						}
+						else if(document.getElementById(cssId)){
+							if(document.getElementById(cssId).href !== "https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css"){
+								document.getElementById(cssId).remove();
+							}
 						}
 						var root = document.querySelector(':root');
 	
@@ -238,39 +302,246 @@ var DiscordRevamp = (() => {
 						root.style.setProperty("--accentcolor", `${r},${g},${b}`);  
 						root.style.setProperty("--linkcolor", `${r},${g},${b}`);
 					}
-					else if(this.settings.recolor.recolormode === 0){
-						var cssId = 'css';
-						if (!document.getElementById(cssId))
-						{
-							var link  = document.createElement('link');
-							link.id   = cssId;
-							link.rel  = 'stylesheet';
-							link.type = 'text/css';
-							link.href = 'https://mwittrien.github.io/BetterDiscordAddons/Themes/BlurpleRecolor/BlurpleRecolor.css';
-							link.media = 'all';
-							head.appendChild(link);
+					if(this.settings.recolor.recolormode === 2){
+						var cssId = 'cssRecolor';
+						if (!document.getElementById(cssId)) 
+                        {
+                            var link = document.createElement('link');
+                            link.id = cssId;
+                            link.rel = 'stylesheet';
+                            link.type = 'text/css';
+                            link.href = 'https://goldenlys.github.io/BetterDiscord-Elysia/RGB/2.css';
+                            link.media = 'all';
+                            head.appendChild(link);
+                        }
+						else if(document.getElementById(cssId)){
+							if(document.getElementById(cssId).href !== "https://goldenlys.github.io/BetterDiscord-Elysia/RGB/2.css"){
+								document.getElementById(cssId).remove();
+							}
 						}
-						var root = document.querySelector(':root');
-	
-						var r = hexToRgb("#00B0F4").r;
-						var g = hexToRgb("#00B0F4").g;
-						var b = hexToRgb("#00B0F4").b;
-	
-						root.style.setProperty("--accentcolor", `${r},${g},${b}`);  
-						root.style.setProperty("--linkcolor", `${r},${g},${b}`);
+                        var root = document.querySelector(':root');
+                        
+                        root.style.setProperty("--time", `${this.settings.recolor.rgbspeed}`);
+
+                        root.style.setProperty("--C1", `130,0,216`);
+                        root.style.setProperty("--C2", `0,255,255`);
+					}
+					else if(this.settings.recolor.recolormode === 0){
+						var cssId = 'cssRecolor';
+						if(document.getElementById(cssId)){
+							document.getElementById(cssId).remove();
+						}
+					}
+
+					var home = document.getElementsByClassName("childWrapper-anI2G9")[0];
+
+					console.log(home);
+
+					if(home){
+						var child = home.children[0];
+						if(this.settings.logo.discordlogo === 0){
+							child.style.opacity = "100%";
+							home.style.backgroundImage = "";
+						}
+						else if(this.settings.logo.discordlogo === 1){
+							child.style.opacity = "0";
+							if(home.style.backgroundImage !== "url('https://i.ibb.co/tzbgNpH/Discord-Revamp-Logo.png')"){
+								home.style.backgroundImage = "url('https://i.ibb.co/tzbgNpH/Discord-Revamp-Logo.png')";
+								home.style.backgroundPosition = "center";
+								home.style.backgroundSize = "35px 35px";
+								home.style.backgroundRepeat = "no-repeat";
+							}
+						}
+						else if(this.settings.logo.discordlogo === 2){
+							child.style.opacity = "0";
+							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee2f3-963c2bc6-af7a-4a3d-9660-ab81e34c9032.png/v1/fill/w_894,h_894,strp/discord_logo___smile_by_mgs551_ddee2f3-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUyZjMtOTYzYzJiYzYtYWY3YS00YTNkLTk2NjAtYWI4MWUzNGM5MDMyLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.S3hF-iB66a42fXFuviocyh2l3XBlyYO3e-dLSxTe1OM')"){
+								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee2f3-963c2bc6-af7a-4a3d-9660-ab81e34c9032.png/v1/fill/w_894,h_894,strp/discord_logo___smile_by_mgs551_ddee2f3-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUyZjMtOTYzYzJiYzYtYWY3YS00YTNkLTk2NjAtYWI4MWUzNGM5MDMyLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.S3hF-iB66a42fXFuviocyh2l3XBlyYO3e-dLSxTe1OM')";
+								home.style.backgroundPosition = "center";
+								home.style.backgroundSize = "35px 35px";
+								home.style.backgroundRepeat = "no-repeat";
+							}
+						}
+						else if(this.settings.logo.discordlogo === 3){
+							child.style.opacity = "0";
+							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3jf-50c833bc-4fc9-41c5-8552-5b203ce0d930.png/v1/fill/w_894,h_894,strp/discord_logo___sad_by_mgs551_ddee3jf-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzamYtNTBjODMzYmMtNGZjOS00MWM1LTg1NTItNWIyMDNjZTBkOTMwLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.V-M9J5l5F-9P4LEIifTG1UZ8Bkxv3G5t5PLKhXHX5pw')"){
+								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3jf-50c833bc-4fc9-41c5-8552-5b203ce0d930.png/v1/fill/w_894,h_894,strp/discord_logo___sad_by_mgs551_ddee3jf-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzamYtNTBjODMzYmMtNGZjOS00MWM1LTg1NTItNWIyMDNjZTBkOTMwLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.V-M9J5l5F-9P4LEIifTG1UZ8Bkxv3G5t5PLKhXHX5pw')";
+								home.style.backgroundPosition = "center";
+								home.style.backgroundSize = "35px 35px";
+								home.style.backgroundRepeat = "no-repeat";
+							}
+						}
+						else if(this.settings.logo.discordlogo === 4){
+							child.style.opacity = "0";
+							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3du-e97756db-798b-450a-92ed-e2b33eec0d92.png/v1/fill/w_894,h_894,strp/discord_logo___angry_by_mgs551_ddee3du-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzZHUtZTk3NzU2ZGItNzk4Yi00NTBhLTkyZWQtZTJiMzNlZWMwZDkyLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.coJzbSBUkFUphDp4BIjqS4VK26c0iKuoZsEVslCwZ50')"){
+								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3du-e97756db-798b-450a-92ed-e2b33eec0d92.png/v1/fill/w_894,h_894,strp/discord_logo___angry_by_mgs551_ddee3du-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzZHUtZTk3NzU2ZGItNzk4Yi00NTBhLTkyZWQtZTJiMzNlZWMwZDkyLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.coJzbSBUkFUphDp4BIjqS4VK26c0iKuoZsEVslCwZ50')";
+								home.style.backgroundPosition = "center";
+								home.style.backgroundSize = "35px 35px";
+								home.style.backgroundRepeat = "no-repeat";
+							}
+						}
+						else if(this.settings.logo.discordlogo === 5){
+							child.style.opacity = "0";
+							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei3yy-b7227286-c75a-406a-bd95-958072a59e97.png/v1/fill/w_894,h_894,strp/discord_logo___gentleman_by_mgs551_ddei3yy-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWkzeXktYjcyMjcyODYtYzc1YS00MDZhLWJkOTUtOTU4MDcyYTU5ZTk3LnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.ooazOiIchzXTmb3AkNOiRUYLwNzelG3HHl0h4MF4Zo4')"){
+								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei3yy-b7227286-c75a-406a-bd95-958072a59e97.png/v1/fill/w_894,h_894,strp/discord_logo___gentleman_by_mgs551_ddei3yy-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWkzeXktYjcyMjcyODYtYzc1YS00MDZhLWJkOTUtOTU4MDcyYTU5ZTk3LnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.ooazOiIchzXTmb3AkNOiRUYLwNzelG3HHl0h4MF4Zo4')";
+								home.style.backgroundPosition = "center";
+								home.style.backgroundSize = "35px 35px";
+								home.style.backgroundRepeat = "no-repeat";
+							}
+						}
+						else if(this.settings.logo.discordlogo === 6){
+							child.style.opacity = "0";
+							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei491-2f97c4a9-ee92-46ef-977b-053736fcd2ca.png/v1/fill/w_894,h_894,strp/discord_logo___annoyed_by_mgs551_ddei491-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWk0OTEtMmY5N2M0YTktZWU5Mi00NmVmLTk3N2ItMDUzNzM2ZmNkMmNhLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.cTcUyWWC34yjGPljkys7RiUcXwh-LR23t63Uz7IOj6Y')"){
+								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei491-2f97c4a9-ee92-46ef-977b-053736fcd2ca.png/v1/fill/w_894,h_894,strp/discord_logo___annoyed_by_mgs551_ddei491-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWk0OTEtMmY5N2M0YTktZWU5Mi00NmVmLTk3N2ItMDUzNzM2ZmNkMmNhLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.cTcUyWWC34yjGPljkys7RiUcXwh-LR23t63Uz7IOj6Y')";
+								home.style.backgroundPosition = "center";
+								home.style.backgroundSize = "35px 35px";
+								home.style.backgroundRepeat = "no-repeat";
+							}
+						}
+						else if(this.settings.logo.discordlogo === 7){
+							child.style.opacity = "0";
+							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee2nm-97d068a7-f542-4503-b717-b5febc12b0a3.png/v1/fill/w_894,h_894,strp/discord_logo___uwu_by_mgs551_ddee2nm-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUybm0tOTdkMDY4YTctZjU0Mi00NTAzLWI3MTctYjVmZWJjMTJiMGEzLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.b-ylgrMjPbXthk9QKrbeY5R1mpZC4LNOKYGJLManc8M')"){
+								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee2nm-97d068a7-f542-4503-b717-b5febc12b0a3.png/v1/fill/w_894,h_894,strp/discord_logo___uwu_by_mgs551_ddee2nm-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUybm0tOTdkMDY4YTctZjU0Mi00NTAzLWI3MTctYjVmZWJjMTJiMGEzLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.b-ylgrMjPbXthk9QKrbeY5R1mpZC4LNOKYGJLManc8M')";
+								home.style.backgroundPosition = "center";
+								home.style.backgroundSize = "35px 35px";
+								home.style.backgroundRepeat = "no-repeat";
+							}
+						}
 					}
 		
 					ownID = BdApi.findModuleByProps("getCurrentUser").getCurrentUser().id;
+
+					var profileacc = document.getElementsByClassName("connectedAccounts-repVzS");
+
+					for(var i = 0; i < profileacc.length; i++){
+						var background = profileacc[i].parentElement.parentElement.parentElement.parentElement.children[0];
+						var checked = background.getAttribute("checked");
+						var accounts = profileacc[i].children;
+
+						var steambg;
+						var steambg2;
+						var steamborder;
+
+						if(!checked){
+							if(this.settings.profile.steam){
+								var link = undefined;
+								for(var ac = 0; ac < accounts.length; ac++){
+									var acc = accounts[ac].children[0].alt.split(" ")[0];
+									if(acc === "Steam"){
+										found = true;
+										link = accounts[ac].children[2].href;
+										background.children[0].children[0].children[0].children[0].children[0].style.borderRadius = "0";
+										background.children[0].children[0].children[0].children[0].children[0].style.border = "solid";
+										background.children[0].children[0].children[0].children[0].children[0].style.borderWidth = "1px";
+										background.children[0].children[0].children[0].children[0].children[0].style.borderColor = "#898989";
+										background.children[0].children[0].children[0].children[0].children[0].style.borderColor = "#898989";
+										background.children[0].children[0].children[0].children[0].children[0].style.boxShadow = "1px 2px 15px #000000, 1px 2px 5px #000000";
+									}
+								}
+								if(!found){
+									started = false;
+								}
+								if(!started){
+									if(link){
+										started = true;
+										request.get(link, async (error, response, body) => {
+											if (error) return
+											var checked2 = background.getAttribute("checked");
+											var el = document.createElement("html");
+											el.innerHTML = body;
+											var vid = document.createElement("video");
+											var img;
+											var elem = document.createElement("img");
+											if(el.getElementsByClassName("profile_animated_background")[0]){
+												steambg = el.getElementsByClassName("profile_animated_background")[0].children[0].children[0].src;
+												steamborder = el.getElementsByClassName("profile_avatar_frame")[0].children[0].src;
+												vid.src = steambg;
+												vid.autoplay = true;
+												vid.playsInline = true;
+												vid.muted = true;
+												vid.loop = true;
+												vid.style.width = "100%";
+												vid.style.position = "absolute";
+												vid.style.zIndex = "-1";
+												var h = Number(window.getComputedStyle(background).height.replace("px", ""));
+												vid.addEventListener( "loadedmetadata", function (e) {
+													var width = this.videoWidth;
+													var height = this.videoHeight;
+													var mul = gcd(width, height);
+													var hei = (height / mul) * (600 / (width / mul));
+													vid.style.top = `calc(${h / 2}px - ${hei / 2}px)`;
+												}, false );
+											}
+											else if(el.getElementsByClassName("has_profile_background")[1]){
+												img = el.getElementsByClassName("has_profile_background")[1].style.backgroundImage;
+											}
+											if(el.getElementsByClassName("profile_avatar_frame")[0]){
+												var srcimg = el.getElementsByClassName("profile_avatar_frame")[0].children[0].src;
+												elem.src = srcimg; //- Steam border. -//
+												elem.style.position = "absolute";
+												elem.style.top = "calc(25% - 4px)";
+												elem.style.left = "calc(25% - 4px)";
+												elem.style.width = "50px";
+												elem.style.height = "50px";
+												elem.setAttribute("class", "avatar-VxgULZ da-avatar");
+											}
+											if(!checked2){
+												if(el.getElementsByClassName("profile_animated_background")[0]){
+													background.appendChild(vid);
+													background.style.backgroundColor = "transparent";
+													background.parentElement.style.backgroundColor = "transparent";
+													background.style.boxShadow = "0 0 15px #000000 inset, 0 0 5px #000000 inset";
+												}
+												else if(el.getElementsByClassName("has_profile_background")[1]){
+													background.style.backgroundImage = img;
+													background.style.backgroundSize = "cover";
+													background.style.backgroundPosition = "center";
+													background.style.boxShadow = "0 0 15px #000000 inset, 0 0 5px #000000 inset";
+												}
+												else{
+													background.style.backgroundImage = "url('https://community.akamai.steamstatic.com/public/images/profile/2020/bg_dots.png')"; //- Default Steam background. -//
+													background.style.backgroundSize = "cover";
+													background.style.backgroundPosition = "center";
+													background.style.boxShadow = "0 0 15px #000000 inset, 0 0 5px #000000 inset";
+												}
+												background.children[0].children[0].children[0].children[0].appendChild(elem);
+												background.children[0].children[0].children[0].children[0].children[0].style.borderRadius = "0";
+												background.setAttribute("checked", "true");
+												started = false;
+											}
+										});
+									}
+								}
+							}
+						}
+					}
 					
 					var profile = document.getElementsByClassName("avatar-3EQepX");
 					
 					for(var i = 0; i < profile.length; i++){
 						var id = profile[i].getAttribute("user_by_bdfdb");
+						var background = profile[i].parentElement.parentElement;
+						var checked = background.getAttribute("checked");
+
+						if(!checked){
+							if(this.settings.profile.steam){
+								profile[i].style.zIndex = "1";
+								profile[i].parentElement.children[1].style.zIndex = "1";
+								if(background.children[1].classList[0] === "headerFill-adLl4x"){
+									background.children[0].style.height = "80px";
+								}
+								else{
+									background.children[0].style.height = "160px";
+								}
+								background.parentElement.children[1].style.zIndex = "1";
+							}
+						}
+
 						if(id === ownID){
-							var background = profile[i].parentElement.parentElement;
-							var checked = background.getAttribute("checked");
 							if(!checked){
-								if(validURL(this.settings.profile.customBackground)){
+								if(this.settings.profile.steam){
+									return
+								}
+								else if(validURL(this.settings.profile.customBackground)){
 									background.style.backgroundImage = `url('${this.settings.profile.customBackground}')`
 									background.style.backgroundSize = "cover";
 									background.style.backgroundPosition = "center";
@@ -308,19 +579,30 @@ var DiscordRevamp = (() => {
 							profile[i].children[0].children[0].children[0].style.top = "20px";
 							profile[i].children[0].children[0].children[0].style.left = "20px";
 							profile[i].children[0].children[0].children[0].style.position = "absolute";
-							profile[i].children[0].children[0].children[0].style.borderRadius = "50%";
+							if(profile[i].children[0].children[0].children[0].style.borderWidth !== "1px"){
+								profile[i].children[0].children[0].children[0].style.borderRadius = "50%";
+							}
 							profile[i].children[0].children[1].style.transform = "scale(0.5)";
 							profile[i].children[0].children[1].style.position = "absolute";
-							profile[i].children[0].children[1].setAttribute("x", "97");
 							profile[i].children[0].children[1].setAttribute("y", "97");
-							profile[i].children[0].children[1].style.width = "25px";
+							if(profile[i].children[0].children[1].getAttribute("mask") === "url(#svg-mask-status-online-mobile)"){
+								profile[i].children[0].children[1].style.width = "17px";
+								profile[i].children[0].children[1].setAttribute("x", "104");
+							}
+							else{
+								profile[i].children[0].children[1].style.width = "25px";
+								profile[i].children[0].children[1].setAttribute("x", "97");
+							}
 							profile[i].children[0].children[1].style.height = "25px";
 							profile[i].children[0].children[0].children[0].setAttribute("checked", "true");
 						}
 						var bord = profile[i].children[0].children[0].getAttribute("border");
 						if(!bord){
 							var elem = document.createElement("img");
-							if(this.settings.border.borders === 0){
+							if(this.settings.profile.steam){
+								return;
+							}
+							else if(this.settings.border.borders === 0){
 								elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 1px)";
@@ -467,7 +749,10 @@ var DiscordRevamp = (() => {
 								}
 							}
 							elem.setAttribute("class", "avatar-VxgULZ da-avatar");
-							if(this.settings.border.self === true){
+							if(this.settings.profile.steam){
+								return;
+							}
+							else if(this.settings.border.self === true){
 								if(id === ownID){
 									profile[i].children[0].children[0].appendChild(elem);
 									if(this.settings.border.borders === 9){
@@ -543,9 +828,15 @@ var DiscordRevamp = (() => {
 							miniprofile[i].children[0].children[0].children[0].children[0].style.borderRadius = "50%";
 							miniprofile[i].children[0].children[0].children[1].style.transform = "scale(0.5)";
 							miniprofile[i].children[0].children[0].children[1].style.position = "absolute";
-							miniprofile[i].children[0].children[0].children[1].setAttribute("x", "97");
 							miniprofile[i].children[0].children[0].children[1].setAttribute("y", "97");
-							miniprofile[i].children[0].children[0].children[1].style.width = "25px";
+							if(miniprofile[i].children[0].children[0].children[1].getAttribute("mask") === "url(#svg-mask-status-online-mobile)"){
+								miniprofile[i].children[0].children[0].children[1].style.width = "17px";
+								miniprofile[i].children[0].children[0].children[1].setAttribute("x", "101");
+							}
+							else{
+								miniprofile[i].children[0].children[0].children[1].style.width = "25px";
+								miniprofile[i].children[0].children[0].children[1].setAttribute("x", "97");
+							}
 							miniprofile[i].children[0].children[0].children[1].style.height = "25px";
 							miniprofile[i].children[1].style.transform = "scale(0.5)";
 							miniprofile[i].children[0].children[0].children[0].children[0].setAttribute("checked", "true");
@@ -1132,10 +1423,35 @@ var DiscordRevamp = (() => {
                             vc[i].parentElement.parentElement.style.transform = "scale(2)";
                         }
 						if(this.settings.border.borders === 9){
-							vc[i].children[0].children[0].style.borderRadius = "0";
-							if(vc[i].children[0].children[1]){
-								if(vc[i].children[0].children[1].classList[0] === "border-Jn5IOt"){
-									vc[i].children[0].children[1].style.borderRadius = "0";
+							if(this.settings.border.self){
+								if(this.settings.border.glow && userID === ownID){
+									vc[i].children[0].children[0].style.borderRadius = "0";
+									if(vc[i].children[0].children[1]){
+										if(vc[i].children[0].children[1].classList[0] === "border-Jn5IOt"){
+											vc[i].children[0].children[1].style.borderRadius = "0";
+										}
+									}
+								}
+							}
+							else if(this.settings.options.other){
+								var ids = this.settings.options.ids.replace(/ /g, "").split(",");
+								for (var t = 0; t < ids.length; t++){
+									if(ids[t] === userID){
+										vc[i].children[0].children[0].style.borderRadius = "0";
+										if(vc[i].children[0].children[1]){
+											if(vc[i].children[0].children[1].classList[0] === "border-Jn5IOt"){
+												vc[i].children[0].children[1].style.borderRadius = "0";
+											}
+										}
+									}
+								}
+							}
+							else{
+								vc[i].children[0].children[0].style.borderRadius = "0";
+								if(vc[i].children[0].children[1]){
+									if(vc[i].children[0].children[1].classList[0] === "border-Jn5IOt"){
+										vc[i].children[0].children[1].style.borderRadius = "0";
+									}
 								}
 							}
 						}
@@ -1691,6 +2007,9 @@ var DiscordRevamp = (() => {
 			 	b: parseInt(result[3], 16)
 			} : null;
 		}
+		function gcd (a, b) {
+            return (b == 0) ? a : gcd (b, a%b);
+        }
 		return plugin(Plugin, Api);
 	})(global.ZeresPluginLibrary.buildPlugin(config));
 })();
