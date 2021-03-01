@@ -22,7 +22,9 @@
 
 * <b>Custom profile borders</b> (images and gifs supports), and <b>glow effect</b>.
 * <b>Custom profile backgrounds</b> (images and gifs supports).
+* <b>Discord profile sync with Steam background and border<b>.
 * <b>Custom Discord recolor</b>.
+* <b>Custom Discord logo<b> (images and gifs supports).
 
 ## Contact :
 
@@ -33,3 +35,4 @@ Twachx's Discord : <b>Twachx#0420</b>
 ## Credits :
 
 * <a href="https://github.com/mwittrien/BetterDiscordAddons/tree/master/Themes/BlurpleRecolor/">Blurple Recolor by mwittrien.</a>
+* <a href="https://www.deviantart.com/mgs551">Some Discord logos we used by MGs551.</a>
