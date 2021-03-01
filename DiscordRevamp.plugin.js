@@ -13,7 +13,7 @@ var DiscordRevamp = (() => {
 			name: "Discord Revamp",
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}, {name: "Twachx", github_username: "Twackx", discord_id: "155773083196588033"}],
 			description: "Revamps Discord and will add more features in the future.",
-			version: "0.3.0",
+			version: "0.3.1",
 			github: "https://github.com/FridyGruder/Discord-Revamp",
 			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
@@ -151,14 +151,14 @@ var DiscordRevamp = (() => {
                         name: "Discord Recolor",
                         note: "Recolor the basic color of Discord. (Only works with custom color setting.)",
                         value: "#00B0F4"
-                    },
-					{
-                        type: "textbox",
-                        id: "rgbspeed",
-                        name: "RGB Mode Speed",
-                        note: "Define the speed of the RGB color.",
-                        value: "5"
                     }
+					// {
+                    //     type: "textbox",
+                    //     id: "rgbspeed",
+                    //     name: "RGB Mode Speed",
+                    //     note: "Define the speed of the RGB color.",
+                    //     value: "5"
+                    // }
                 ]
             },
 			{
@@ -183,16 +183,16 @@ var DiscordRevamp = (() => {
                             { name: "Gentleman", value: 5 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-Gentleman-810419866
                             { name: "Annoyed", value: 6 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-Annoyed-810420229
                             { name: "UwU", value: 7 }, // https://www.deviantart.com/mgs551/art/Discord-Logo-uwu-810231538
-                            //{ name: "Custom", value: 8 } //- Not yet implemented. -//
+                            { name: "Custom", value: 8 } 
                         ]
+                    },
+                    {
+                        type: "textbox",
+                        id: "customLogo",
+                        name: "Custom Logo",
+                        note: "Choose your own Discord logo. (Has to be an URL.)",
+                        value: ""
                     }
-                    // {
-                    //     type:"textbox",
-                    //     id:"customLogo",
-                    //     name:"Custom Logo",
-                    //     note:"Choose your own Discord logo. (Has to be an URL.)",
-                    //     value:""
-                    // }
                 ]
             },
         ],
@@ -200,12 +200,12 @@ var DiscordRevamp = (() => {
 			{
 				"title": "Added",
 				"type": "added",
-				"items": ["Added Steam profiles setting. You can now see people's steam profile directly on their Discord profile! (In Beta phase.)", "Added Discord logo setting. (More features coming soon!)"]
+				"items": ["Added a setting to set a custom Discord logo."]
 			},
 			{
 				"title": "Fixed",
 				"type": "fixed",
-				"items": ["Fixed visual bugs with the status hint.", "Fixed minor general bugs and optimized the plugin."]
+				"items": ["Fixed minor bugs."]
 			}
 		]
 	};
@@ -344,12 +344,12 @@ var DiscordRevamp = (() => {
 							home.style.backgroundImage = "";
 						}
 						else if(this.settings.logo.discordlogo === 1){
-							child.style.opacity = "0";
 							if(home.style.backgroundImage !== "url('https://i.ibb.co/tzbgNpH/Discord-Revamp-Logo.png')"){
 								home.style.backgroundImage = "url('https://i.ibb.co/tzbgNpH/Discord-Revamp-Logo.png')";
 								home.style.backgroundPosition = "center";
 								home.style.backgroundSize = "35px 35px";
 								home.style.backgroundRepeat = "no-repeat";
+								child.style.opacity = "0";
 							}
 						}
 						else if(this.settings.logo.discordlogo === 2){
@@ -359,51 +359,66 @@ var DiscordRevamp = (() => {
 								home.style.backgroundPosition = "center";
 								home.style.backgroundSize = "35px 35px";
 								home.style.backgroundRepeat = "no-repeat";
+								child.style.opacity = "0";
 							}
 						}
 						else if(this.settings.logo.discordlogo === 3){
-							child.style.opacity = "0";
 							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3jf-50c833bc-4fc9-41c5-8552-5b203ce0d930.png/v1/fill/w_894,h_894,strp/discord_logo___sad_by_mgs551_ddee3jf-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzamYtNTBjODMzYmMtNGZjOS00MWM1LTg1NTItNWIyMDNjZTBkOTMwLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.V-M9J5l5F-9P4LEIifTG1UZ8Bkxv3G5t5PLKhXHX5pw')"){
 								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3jf-50c833bc-4fc9-41c5-8552-5b203ce0d930.png/v1/fill/w_894,h_894,strp/discord_logo___sad_by_mgs551_ddee3jf-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzamYtNTBjODMzYmMtNGZjOS00MWM1LTg1NTItNWIyMDNjZTBkOTMwLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.V-M9J5l5F-9P4LEIifTG1UZ8Bkxv3G5t5PLKhXHX5pw')";
 								home.style.backgroundPosition = "center";
 								home.style.backgroundSize = "35px 35px";
 								home.style.backgroundRepeat = "no-repeat";
+								child.style.opacity = "0";
 							}
 						}
 						else if(this.settings.logo.discordlogo === 4){
-							child.style.opacity = "0";
 							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3du-e97756db-798b-450a-92ed-e2b33eec0d92.png/v1/fill/w_894,h_894,strp/discord_logo___angry_by_mgs551_ddee3du-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzZHUtZTk3NzU2ZGItNzk4Yi00NTBhLTkyZWQtZTJiMzNlZWMwZDkyLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.coJzbSBUkFUphDp4BIjqS4VK26c0iKuoZsEVslCwZ50')"){
 								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee3du-e97756db-798b-450a-92ed-e2b33eec0d92.png/v1/fill/w_894,h_894,strp/discord_logo___angry_by_mgs551_ddee3du-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUzZHUtZTk3NzU2ZGItNzk4Yi00NTBhLTkyZWQtZTJiMzNlZWMwZDkyLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.coJzbSBUkFUphDp4BIjqS4VK26c0iKuoZsEVslCwZ50')";
 								home.style.backgroundPosition = "center";
 								home.style.backgroundSize = "35px 35px";
 								home.style.backgroundRepeat = "no-repeat";
+								child.style.opacity = "0";
 							}
 						}
 						else if(this.settings.logo.discordlogo === 5){
-							child.style.opacity = "0";
 							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei3yy-b7227286-c75a-406a-bd95-958072a59e97.png/v1/fill/w_894,h_894,strp/discord_logo___gentleman_by_mgs551_ddei3yy-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWkzeXktYjcyMjcyODYtYzc1YS00MDZhLWJkOTUtOTU4MDcyYTU5ZTk3LnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.ooazOiIchzXTmb3AkNOiRUYLwNzelG3HHl0h4MF4Zo4')"){
 								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei3yy-b7227286-c75a-406a-bd95-958072a59e97.png/v1/fill/w_894,h_894,strp/discord_logo___gentleman_by_mgs551_ddei3yy-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWkzeXktYjcyMjcyODYtYzc1YS00MDZhLWJkOTUtOTU4MDcyYTU5ZTk3LnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.ooazOiIchzXTmb3AkNOiRUYLwNzelG3HHl0h4MF4Zo4')";
 								home.style.backgroundPosition = "center";
 								home.style.backgroundSize = "35px 35px";
 								home.style.backgroundRepeat = "no-repeat";
+								child.style.opacity = "0";
 							}
 						}
 						else if(this.settings.logo.discordlogo === 6){
-							child.style.opacity = "0";
 							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei491-2f97c4a9-ee92-46ef-977b-053736fcd2ca.png/v1/fill/w_894,h_894,strp/discord_logo___annoyed_by_mgs551_ddei491-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWk0OTEtMmY5N2M0YTktZWU5Mi00NmVmLTk3N2ItMDUzNzM2ZmNkMmNhLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.cTcUyWWC34yjGPljkys7RiUcXwh-LR23t63Uz7IOj6Y')"){
 								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddei491-2f97c4a9-ee92-46ef-977b-053736fcd2ca.png/v1/fill/w_894,h_894,strp/discord_logo___annoyed_by_mgs551_ddei491-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWk0OTEtMmY5N2M0YTktZWU5Mi00NmVmLTk3N2ItMDUzNzM2ZmNkMmNhLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.cTcUyWWC34yjGPljkys7RiUcXwh-LR23t63Uz7IOj6Y')";
 								home.style.backgroundPosition = "center";
 								home.style.backgroundSize = "35px 35px";
 								home.style.backgroundRepeat = "no-repeat";
+								child.style.opacity = "0";
 							}
 						}
 						else if(this.settings.logo.discordlogo === 7){
-							child.style.opacity = "0";
 							if(home.style.backgroundImage !== "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee2nm-97d068a7-f542-4503-b717-b5febc12b0a3.png/v1/fill/w_894,h_894,strp/discord_logo___uwu_by_mgs551_ddee2nm-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUybm0tOTdkMDY4YTctZjU0Mi00NTAzLWI3MTctYjVmZWJjMTJiMGEzLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.b-ylgrMjPbXthk9QKrbeY5R1mpZC4LNOKYGJLManc8M')"){
 								home.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/73790822-f2ce-45aa-bcb9-9f89327637d6/ddee2nm-97d068a7-f542-4503-b717-b5febc12b0a3.png/v1/fill/w_894,h_894,strp/discord_logo___uwu_by_mgs551_ddee2nm-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3siaGVpZ2h0IjoiPD04OTQiLCJwYXRoIjoiXC9mXC83Mzc5MDgyMi1mMmNlLTQ1YWEtYmNiOS05Zjg5MzI3NjM3ZDZcL2RkZWUybm0tOTdkMDY4YTctZjU0Mi00NTAzLWI3MTctYjVmZWJjMTJiMGEzLnBuZyIsIndpZHRoIjoiPD04OTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.b-ylgrMjPbXthk9QKrbeY5R1mpZC4LNOKYGJLManc8M')";
 								home.style.backgroundPosition = "center";
 								home.style.backgroundSize = "35px 35px";
 								home.style.backgroundRepeat = "no-repeat";
+								child.style.opacity = "0";
+							}
+						}
+						else if(this.settings.logo.discordlogo === 8){
+							if(validURL(this.settings.logo.customLogo)){
+								child.style.opacity = "0";
+								if(home.style.backgroundImage !== `url('${this.settings.logo.customLogo}')`){
+									home.style.backgroundImage = `url('${this.settings.logo.customLogo}')`;
+									home.style.backgroundPosition = "center";
+									home.style.backgroundSize = "35px 35px";
+									home.style.backgroundRepeat = "no-repeat";
+								}
+							}
+							else{
+								child.style.opacity = "100%";
 							}
 						}
 					}
