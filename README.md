@@ -22,9 +22,9 @@
 
 * <b>Custom profile borders</b> (images and gifs supports), and <b>glow effect</b>.
 * <b>Custom profile backgrounds</b> (images and gifs supports).
-* <b>Discord profile sync with Steam background and border<b>.
+* <b>Discord profile sync with Steam background and border</b>.
 * <b>Custom Discord recolor</b>.
-* <b>Custom Discord logo<b> (images and gifs supports).
+* <b>Custom Discord logo</b> (images and gifs supports).
 
 ## Contact :
 
