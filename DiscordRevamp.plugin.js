@@ -13,7 +13,7 @@ var DiscordRevamp = (() => {
 			name: "Discord Revamp",
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}, {name: "Twachx", github_username: "Twackx", discord_id: "155773083196588033"}],
 			description: "Revamps Discord and will add more features in the future.",
-			version: "0.3.1",
+			version: "0.3.2",
 			github: "https://github.com/FridyGruder/Discord-Revamp",
 			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
@@ -111,6 +111,13 @@ var DiscordRevamp = (() => {
                         ]
                     },
                     {
+                        type:"switch",
+                        id:"backgroundSelf",
+                        name:"Self Cackground Only",
+                        note:"Choose if the background is applied on yourself only or on everyone.",
+                        value: false
+                    },
+                    {
                         type:"textbox",
                         id:"customBackground",
                         name:"Custom Background",
@@ -122,7 +129,7 @@ var DiscordRevamp = (() => {
                         id: "steam",
                         name: "Steam Profile",
                         note: "Choose if you want other's profile to be their steam profile, border included. (This may lag low-end PCs.)",
-                        value: false
+                        value: true
                     }
                 ]
             },
@@ -150,7 +157,7 @@ var DiscordRevamp = (() => {
                         id: "discordrecolor",
                         name: "Discord Recolor",
                         note: "Recolor the basic color of Discord. (Only works with custom color setting.)",
-                        value: "#00B0F4"
+                        value: "#7289DA"
                     }
 					// {
                     //     type: "textbox",
@@ -200,12 +207,12 @@ var DiscordRevamp = (() => {
 			{
 				"title": "Added",
 				"type": "added",
-				"items": ["Added a setting to set a custom Discord logo."]
+				"items": ["Added settings to apply the custom background on everyone."]
 			},
 			{
 				"title": "Fixed",
 				"type": "fixed",
-				"items": ["Fixed minor bugs."]
+				"items": ["Fixed the Steam setting not working on other languages than English.", "Fixed the default Discord color."]
 			}
 		]
 	};
@@ -264,7 +271,7 @@ var DiscordRevamp = (() => {
 					
 					var hex = "#FFFFFF"
 
-					var hex2 = "#00B0F4"
+					var hex2 = "#7289DA"
 
 					if(/^#[0-9A-F]{6}$/i.test(this.settings.recolor.discordrecolor)){
 						hex2 = this.settings.recolor.discordrecolor;
@@ -334,8 +341,6 @@ var DiscordRevamp = (() => {
 					}
 
 					var home = document.getElementsByClassName("childWrapper-anI2G9")[0];
-
-					console.log(home);
 
 					if(home){
 						var child = home.children[0];
@@ -440,16 +445,18 @@ var DiscordRevamp = (() => {
 							if(this.settings.profile.steam){
 								var link = undefined;
 								for(var ac = 0; ac < accounts.length; ac++){
-									var acc = accounts[ac].children[0].alt.split(" ")[0];
-									if(acc === "Steam"){
-										found = true;
-										link = accounts[ac].children[2].href;
-										background.children[0].children[0].children[0].children[0].children[0].style.borderRadius = "0";
-										background.children[0].children[0].children[0].children[0].children[0].style.border = "solid";
-										background.children[0].children[0].children[0].children[0].children[0].style.borderWidth = "1px";
-										background.children[0].children[0].children[0].children[0].children[0].style.borderColor = "#898989";
-										background.children[0].children[0].children[0].children[0].children[0].style.borderColor = "#898989";
-										background.children[0].children[0].children[0].children[0].children[0].style.boxShadow = "1px 2px 15px #000000, 1px 2px 5px #000000";
+									var acc = accounts[ac].children[0].alt.split(" ");
+									for(var w = 0; w < acc.length; w++){
+										if(acc[w].toLowerCase() === "steam"){
+											found = true;
+											link = accounts[ac].children[2].href;
+											background.children[0].children[0].children[0].children[0].children[0].style.borderRadius = "0";
+											background.children[0].children[0].children[0].children[0].children[0].style.border = "solid";
+											background.children[0].children[0].children[0].children[0].children[0].style.borderWidth = "1px";
+											background.children[0].children[0].children[0].children[0].children[0].style.borderColor = "#898989";
+											background.children[0].children[0].children[0].children[0].children[0].style.borderColor = "#898989";
+											background.children[0].children[0].children[0].children[0].children[0].style.boxShadow = "1px 2px 15px #000000, 1px 2px 5px #000000";
+										}
 									}
 								}
 								if(!found){
@@ -550,11 +557,47 @@ var DiscordRevamp = (() => {
 								background.parentElement.children[1].style.zIndex = "1";
 							}
 						}
-
-						if(id === ownID){
+						if(this.settings.profile.backgroundSelf){
+							if(id === ownID){
+								if(!checked){
+									if(this.settings.profile.steam){
+										return
+									}
+									else if(validURL(this.settings.profile.customBackground)){
+										background.style.backgroundImage = `url('${this.settings.profile.customBackground}')`
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.children[0].style.height = "150px";
+										background.setAttribute("checked", "true")
+									}
+									else if(this.settings.profile.background === 1){
+										background.style.backgroundImage = "url('https://acegif.com/wp-content/uploads/outerspace-m.gif')"
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.children[0].style.height = "150px";
+										background.setAttribute("checked", "true")
+									}
+									else if(this.settings.profile.background === 2){
+										background.style.backgroundImage = "url('https://thumbs.gfycat.com/CanineSameEwe-small.gif')"
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.children[0].style.height = "150px";
+										background.setAttribute("checked", "true")
+									}
+									else if(this.settings.profile.background === 3){
+										background.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e109d24c-7257-4398-a53c-98fba426c4c5/d8e237b-ffdcf332-681e-41bb-b225-9f691f00495e.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvZTEwOWQyNGMtNzI1Ny00Mzk4LWE1M2MtOThmYmE0MjZjNGM1XC9kOGUyMzdiLWZmZGNmMzMyLTY4MWUtNDFiYi1iMjI1LTlmNjkxZjAwNDk1ZS5naWYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.3de-YquIkjVeme_QEMjHKjsSK5tup3frBcIPgzDkdFg')"
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.children[0].style.height = "150px";
+										background.setAttribute("checked", "true")
+									}
+								}
+							}
+						}
+						else{
 							if(!checked){
 								if(this.settings.profile.steam){
-									return
+									return;
 								}
 								else if(validURL(this.settings.profile.customBackground)){
 									background.style.backgroundImage = `url('${this.settings.profile.customBackground}')`
@@ -801,7 +844,40 @@ var DiscordRevamp = (() => {
 					for(var i = 0; i < miniprofile.length; i++){
 						var id = miniprofile[i].getAttribute("user_by_bdfdb");
 						var bord = miniprofile[i].children[0].children[0].children[0].getAttribute("border");
-						if(id === ownID){
+						if(this.settings.profile.backgroundSelf){
+							if(id === ownID){
+								var background = miniprofile[i].parentElement.parentElement;
+								var checked = background.getAttribute("checked");
+								if(!checked){
+									if(validURL(this.settings.profile.customBackground)){
+										background.style.backgroundImage = `url('${this.settings.profile.customBackground}')`
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.children[0].style.height = "150px";
+										background.setAttribute("checked", "true")
+									}
+									else if(this.settings.profile.background === 1){
+										background.style.backgroundImage = "url('https://acegif.com/wp-content/uploads/outerspace-m.gif')"
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.setAttribute("checked", "true")
+									}
+									else if(this.settings.profile.background === 2){
+										background.style.backgroundImage = "url('https://thumbs.gfycat.com/CanineSameEwe-small.gif')"
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.setAttribute("checked", "true")
+									}
+									else if(this.settings.profile.background === 3){
+										background.style.backgroundImage = "url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e109d24c-7257-4398-a53c-98fba426c4c5/d8e237b-ffdcf332-681e-41bb-b225-9f691f00495e.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvZTEwOWQyNGMtNzI1Ny00Mzk4LWE1M2MtOThmYmE0MjZjNGM1XC9kOGUyMzdiLWZmZGNmMzMyLTY4MWUtNDFiYi1iMjI1LTlmNjkxZjAwNDk1ZS5naWYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.3de-YquIkjVeme_QEMjHKjsSK5tup3frBcIPgzDkdFg')"
+										background.style.backgroundSize = "cover";
+										background.style.backgroundPosition = "center";
+										background.setAttribute("checked", "true")
+									}
+								}
+							}
+						}
+						else{
 							var background = miniprofile[i].parentElement.parentElement;
 							var checked = background.getAttribute("checked");
 							if(!checked){
@@ -1439,12 +1515,10 @@ var DiscordRevamp = (() => {
                         }
 						if(this.settings.border.borders === 9){
 							if(this.settings.border.self){
-								if(this.settings.border.glow && userID === ownID){
-									vc[i].children[0].children[0].style.borderRadius = "0";
-									if(vc[i].children[0].children[1]){
-										if(vc[i].children[0].children[1].classList[0] === "border-Jn5IOt"){
-											vc[i].children[0].children[1].style.borderRadius = "0";
-										}
+								vc[i].children[0].children[0].style.borderRadius = "0";
+								if(vc[i].children[0].children[1]){
+									if(vc[i].children[0].children[1].classList[0] === "border-Jn5IOt"){
+										vc[i].children[0].children[1].style.borderRadius = "0";
 									}
 								}
 							}
