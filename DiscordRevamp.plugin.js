@@ -13,7 +13,7 @@ var DiscordRevamp = (() => {
 			name: "Discord Revamp",
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}, {name: "Twachx", github_username: "Twackx", discord_id: "155773083196588033"}],
 			description: "Revamps Discord and will add more features in the future.",
-			version: "0.3.3",
+			version: "0.3.4",
 			github: "https://github.com/FridyGruder/Discord-Revamp",
 			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
@@ -32,16 +32,17 @@ var DiscordRevamp = (() => {
                         note: "Select which border you want to apply.",
                         value: 0,
                         options: [
-                            { label: 'Rainbow', value: 0 },
-                            { label: 'Shining', value: 1 },
-                            { label: 'Pastel Rainbow', value: 2 },
-                            { label: 'Look ->', value: 3},
-                            { label: 'White Fire', value: 4},
-                            { label: 'Blue Fire', value: 5},
-                            { label: 'White Scribble', value: 6},
-                            { label: 'Purple Scribble', value: 7},
-                            { label: 'Rainbow Scribble', value: 8},
-                            { label: 'Purple Fire (Steam)', value: 9}
+							{ label: 'None', value: 0 },
+                            { label: 'Rainbow', value: 1 },
+                            { label: 'Shining', value: 2 },
+                            { label: 'Pastel Rainbow', value: 3 },
+                            { label: 'Look ->', value: 4 },
+                            { label: 'White Fire', value: 5 },
+                            { label: 'Blue Fire', value: 6 },
+                            { label: 'White Scribble', value: 7 },
+                            { label: 'Purple Scribble', value: 8 },
+                            { label: 'Rainbow Scribble', value: 9 },
+                            { label: 'Purple Fire (Steam)', value: 10 }
                         ]
                     },
                     {
@@ -113,7 +114,7 @@ var DiscordRevamp = (() => {
                     {
                         type:"switch",
                         id:"backgroundSelf",
-                        name:"Self Cackground Only",
+                        name:"Self Background Only",
                         note:"Choose if the background is applied on yourself only or on everyone.",
                         value: false
                     },
@@ -205,9 +206,14 @@ var DiscordRevamp = (() => {
         ],
 		changelog:[
 			{
+				"title": "Added",
+				"type": "added",
+				"items": ["Added a setting to remove border."]
+			},
+			{
 				"title": "Fixed",
 				"type": "fixed",
-				"items": ["Fixed a major bug with borders not showing in chat."]
+				"items": ["Correction of a misspelling."]
 			}
 		]
 	};
@@ -655,7 +661,7 @@ var DiscordRevamp = (() => {
 							if(this.settings.profile.steam){
 								return;
 							}
-							else if(this.settings.border.borders === 0){
+							else if(this.settings.border.borders === 1){
 								elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 1px)";
@@ -667,7 +673,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 1){
+							else if(this.settings.border.borders === 2){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 1px)";
@@ -679,7 +685,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 2){
+							else if(this.settings.border.borders === 3){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 1px)";
@@ -691,7 +697,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 3){
+							else if(this.settings.border.borders === 4){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413351937998848/giphy_7.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 6px)";
@@ -700,7 +706,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "52px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 4){
+							else if(this.settings.border.borders === 5){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811414329378471976/original.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 3px)";
@@ -725,7 +731,7 @@ var DiscordRevamp = (() => {
 									profile[i].children[0].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								}
 							}
-							else if(this.settings.border.borders === 5){
+							else if(this.settings.border.borders === 6){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412156272214016/d26ab6e45a7d77b5f41704c31403d40c.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 3px)";
@@ -750,7 +756,7 @@ var DiscordRevamp = (() => {
 									profile[i].children[0].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								}
 							}
-							else if(this.settings.border.borders === 6){
+							else if(this.settings.border.borders === 7){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412588754763806/giphy_1.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 5px)";
@@ -759,7 +765,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "52px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 7){
+							else if(this.settings.border.borders === 8){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413217963147274/giphy_3.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 4px)";
@@ -768,7 +774,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "48px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 8){
+							else if(this.settings.border.borders === 9){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413250927362098/giphy_4.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 4px)";
@@ -777,7 +783,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "48px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 9){
+							else if(this.settings.border.borders === 10){
 								elem.src = 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/322330/46461aaea39b18a4a3da2e6d3cf253006f2d6193.png';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 4px)";
@@ -930,7 +936,7 @@ var DiscordRevamp = (() => {
 
 						if(!bord){
 							var elem = document.createElement("img");
-							if(this.settings.border.borders === 0){
+							if(this.settings.border.borders === 1){
 								elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 1px)";
@@ -942,7 +948,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 1){
+							else if(this.settings.border.borders === 2){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 1px)";
@@ -954,7 +960,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 2){
+							else if(this.settings.border.borders === 3){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 1px)";
@@ -966,7 +972,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 3){
+							else if(this.settings.border.borders === 4){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413351937998848/giphy_7.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 6px)";
@@ -975,7 +981,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "52px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 4){
+							else if(this.settings.border.borders === 5){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811414329378471976/original.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 3px)";
@@ -1000,7 +1006,7 @@ var DiscordRevamp = (() => {
 									miniprofile[i].children[0].children[0].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								}
 							}
-							else if(this.settings.border.borders === 5){
+							else if(this.settings.border.borders === 6){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412156272214016/d26ab6e45a7d77b5f41704c31403d40c.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 3px)";
@@ -1025,7 +1031,7 @@ var DiscordRevamp = (() => {
 									miniprofile[i].children[0].children[0].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								}
 							}
-							else if(this.settings.border.borders === 6){
+							else if(this.settings.border.borders === 7){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412588754763806/giphy_1.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 5px)";
@@ -1034,7 +1040,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "52px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 7){
+							else if(this.settings.border.borders === 8){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413217963147274/giphy_3.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 4px)";
@@ -1043,7 +1049,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "48px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 8){
+							else if(this.settings.border.borders === 9){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413250927362098/giphy_4.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 4px)";
@@ -1052,7 +1058,7 @@ var DiscordRevamp = (() => {
 								elem.style.height = "48px";
 								elem.style.borderRadius = "50%";
 							}
-							else if(this.settings.border.borders === 9){
+							else if(this.settings.border.borders === 10){
 								elem.src = 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/322330/46461aaea39b18a4a3da2e6d3cf253006f2d6193.png';
 								elem.style.position = "absolute";
 								elem.style.top = "calc(25% - 4px)";
@@ -1080,7 +1086,7 @@ var DiscordRevamp = (() => {
 							if(this.settings.border.self === true){
 								if(id === ownID){
 									miniprofile[i].children[0].children[0].children[0].appendChild(elem);
-									if(this.settings.border.borders === 9){
+									if(this.settings.border.borders === 10){
 										miniprofile[i].children[0].children[0].children[0].children[0].style.borderRadius = "0";
 									}
 								}
@@ -1090,7 +1096,7 @@ var DiscordRevamp = (() => {
 								for (var t = 0; t < ids.length; t++){
 									if(ids[t] === id){
 										miniprofile[i].children[0].children[0].children[0].appendChild(elem);
-										if(this.settings.border.borders === 9){
+										if(this.settings.border.borders === 10){
 											miniprofile[i].children[0].children[0].children[0].children[0].style.borderRadius = "0";
 										}
 									}
@@ -1098,7 +1104,7 @@ var DiscordRevamp = (() => {
 							}
 							else{
 								miniprofile[i].children[0].children[0].children[0].appendChild(elem);
-								if(this.settings.border.borders === 9){
+								if(this.settings.border.borders === 10){
 									miniprofile[i].children[0].children[0].children[0].children[0].style.borderRadius = "0";
 								}
 							}
@@ -1140,7 +1146,7 @@ var DiscordRevamp = (() => {
 							};
 								if(!isSystemMessage && !isReply){
 									var elem = document.createElement("img");
-									if(this.settings.border.borders === 0){
+									if(this.settings.border.borders === 1){
 										elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 										elem.style.top = "1px";
 										elem.style.left = "15px";
@@ -1150,7 +1156,7 @@ var DiscordRevamp = (() => {
 											elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										};
 									}
-									else if(this.settings.border.borders === 1){
+									else if(this.settings.border.borders === 2){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
 										elem.style.top = "1px";
 										elem.style.left = "15px";
@@ -1160,7 +1166,7 @@ var DiscordRevamp = (() => {
 											elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										};
 									}
-									else if(this.settings.border.borders === 2){
+									else if(this.settings.border.borders === 3){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 										elem.style.top = "1px";
 										elem.style.left = "15px";
@@ -1170,14 +1176,14 @@ var DiscordRevamp = (() => {
 											elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										};
 									}
-									else if(this.settings.border.borders === 3){
+									else if(this.settings.border.borders === 4){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413351937998848/giphy_7.gif';
 										elem.style.top = "-4px";
 										elem.style.left = "10px";
 										elem.style.width = "52px";
 										elem.style.height = "52px";
 									}
-									else if(this.settings.border.borders === 4){
+									else if(this.settings.border.borders === 5){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811414329378471976/original.gif';
 										elem.style.top = "-1px";
 										elem.style.left = "13px";
@@ -1200,7 +1206,7 @@ var DiscordRevamp = (() => {
 											x[i].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										}
 									}
-									else if(this.settings.border.borders === 5){
+									else if(this.settings.border.borders === 6){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412156272214016/d26ab6e45a7d77b5f41704c31403d40c.gif';
 										elem.style.top = "-1px";
 										elem.style.left = "13px";
@@ -1223,28 +1229,28 @@ var DiscordRevamp = (() => {
 											x[i].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										}
 									}
-									else if(this.settings.border.borders === 6){
+									else if(this.settings.border.borders === 7){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412588754763806/giphy_1.gif';
 										elem.style.top = "-6px";
 										elem.style.left = "10px";
 										elem.style.width = "52px";
 										elem.style.height = "52px";
 									}
-									else if(this.settings.border.borders === 7){
+									else if(this.settings.border.borders === 8){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413217963147274/giphy_3.gif';
 										elem.style.top = "-3px";
 										elem.style.left = "12px";
 										elem.style.width = "48px";
 										elem.style.height = "48px";
 									}
-									else if(this.settings.border.borders === 8){
+									else if(this.settings.border.borders === 9){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413250927362098/giphy_4.gif';
 										elem.style.top = "-2px";
 										elem.style.left = "12px";
 										elem.style.width = "48px";
 										elem.style.height = "48px";
 									}
-									else if(this.settings.border.borders === 9){
+									else if(this.settings.border.borders === 10){
 										elem.src = 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/322330/46461aaea39b18a4a3da2e6d3cf253006f2d6193.png';
 										elem.style.top = "-2px";
 										elem.style.left = "12px";
@@ -1272,7 +1278,7 @@ var DiscordRevamp = (() => {
 									if(this.settings.border.self === true){
 										if(userID === ownID){
 											x[i].appendChild(elem);
-											if(this.settings.border.borders === 9){
+											if(this.settings.border.borders === 10){
 												x[i].children[0].children[0].style.borderRadius = "0";
 											}
 										}
@@ -1283,7 +1289,7 @@ var DiscordRevamp = (() => {
 										for (var t = 0; t < ids.length; t++){
 											if(ids[t] === userID){
 												x[i].appendChild(elem);
-												if(this.settings.border.borders === 9){
+												if(this.settings.border.borders === 10){
 													x[i].children[0].children[0].style.borderRadius = "0";
 												}
 											}
@@ -1291,7 +1297,7 @@ var DiscordRevamp = (() => {
 									}
 									else{
 										x[i].appendChild(elem);
-										if(this.settings.border.borders === 9){
+										if(this.settings.border.borders === 10){
 											x[i].children[0].children[0].style.borderRadius = "0";
 										}
 									}
@@ -1299,7 +1305,7 @@ var DiscordRevamp = (() => {
 								}
 								else if(!isSystemMessage){
 									var elem = document.createElement("img");
-									if(this.settings.border.borders === 0){
+									if(this.settings.border.borders === 1){
 										elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 										if(hasAtt){
 											elem.style.top = "25px";
@@ -1314,7 +1320,7 @@ var DiscordRevamp = (() => {
 											elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										};
 									}
-									else if(this.settings.border.borders === 1){
+									else if(this.settings.border.borders === 2){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
 										if(hasAtt){
 											elem.style.top = "25px";
@@ -1329,7 +1335,7 @@ var DiscordRevamp = (() => {
 											elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										};
 									}
-									else if(this.settings.border.borders === 2){
+									else if(this.settings.border.borders === 3){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 										if(hasAtt){
 											elem.style.top = "25px";
@@ -1344,7 +1350,7 @@ var DiscordRevamp = (() => {
 											elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										};
 									}
-									else if(this.settings.border.borders === 3){
+									else if(this.settings.border.borders === 4){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413351937998848/giphy_7.gif';
 										if(hasAtt){
 											elem.style.top = "20px";
@@ -1356,7 +1362,7 @@ var DiscordRevamp = (() => {
 										elem.style.width = "52px";
 										elem.style.height = "52px";
 									}
-									else if(this.settings.border.borders === 4){
+									else if(this.settings.border.borders === 5){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811414329378471976/original.gif';
 										if(hasAtt){
 											elem.style.top = "24px";
@@ -1384,7 +1390,7 @@ var DiscordRevamp = (() => {
 											x[i].children[1].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										}
 									}
-									else if(this.settings.border.borders === 5){
+									else if(this.settings.border.borders === 6){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412156272214016/d26ab6e45a7d77b5f41704c31403d40c.gif';
 										if(hasAtt){
 											elem.style.top = "23px";
@@ -1412,7 +1418,7 @@ var DiscordRevamp = (() => {
 											x[i].children[1].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 										}
 									}
-									else if(this.settings.border.borders === 6){
+									else if(this.settings.border.borders === 7){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412588754763806/giphy_1.gif';
 										if(hasAtt){
 											elem.style.top = "18px";
@@ -1424,7 +1430,7 @@ var DiscordRevamp = (() => {
 										elem.style.width = "52px";
 										elem.style.height = "52px";
 									}
-									else if(this.settings.border.borders === 7){
+									else if(this.settings.border.borders === 8){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413217963147274/giphy_3.gif';
 										if(hasAtt){
 											elem.style.top = "22px";
@@ -1436,7 +1442,7 @@ var DiscordRevamp = (() => {
 										elem.style.width = "48px";
 										elem.style.height = "48px";
 									}
-									else if(this.settings.border.borders === 8){
+									else if(this.settings.border.borders === 9){
 										elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413250927362098/giphy_4.gif';
 										if(hasAtt){
 											elem.style.top = "23px";
@@ -1448,7 +1454,7 @@ var DiscordRevamp = (() => {
 										elem.style.width = "48px";
 										elem.style.height = "48px";
 									}
-									else if(this.settings.border.borders === 9){
+									else if(this.settings.border.borders === 10){
 										elem.src = 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/322330/46461aaea39b18a4a3da2e6d3cf253006f2d6193.png';
 										if(hasAtt){
 											elem.style.top = "22px";
@@ -1481,7 +1487,7 @@ var DiscordRevamp = (() => {
 									if(this.settings.border.self === true){
 										if(userID === ownID){
 											x[i].appendChild(elem);
-											if(this.settings.border.borders === 9){
+											if(this.settings.border.borders === 10){
 												x[i].children[1].children[0].style.borderRadius = "0";
 											}
 										}
@@ -1491,7 +1497,7 @@ var DiscordRevamp = (() => {
 										for (var t = 0; t < ids.length; t++){
 											if(ids[t] === userID){
 												x[i].appendChild(elem);
-												if(this.settings.border.borders === 9){
+												if(this.settings.border.borders === 10){
 													x[i].children[1].children[0].style.borderRadius = "0";
 												}
 											}
@@ -1499,7 +1505,7 @@ var DiscordRevamp = (() => {
 									}
 									else{
 										x[i].appendChild(elem);
-										if(this.settings.border.borders === 9){
+										if(this.settings.border.borders === 10){
 											x[i].children[1].children[0].style.borderRadius = "0";
 										}
 									}
@@ -1515,7 +1521,7 @@ var DiscordRevamp = (() => {
                         if(scale === "scale(1)"){
                             vc[i].parentElement.parentElement.style.transform = "scale(2)";
                         }
-						if(this.settings.border.borders === 9){
+						if(this.settings.border.borders === 10){
 							if(this.settings.border.self){
 								vc[i].children[0].children[0].style.borderRadius = "0";
 								if(vc[i].children[0].children[1]){
@@ -1589,7 +1595,7 @@ var DiscordRevamp = (() => {
 						var bord = vc[i].getAttribute("border");
 						if(!bord ){
 							var elem = document.createElement("img");
-							if(this.settings.border.borders === 0){
+							if(this.settings.border.borders === 1){
 								elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "19px";
@@ -1600,7 +1606,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 1){
+							else if(this.settings.border.borders === 2){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "19px";
@@ -1611,7 +1617,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 2){
+							else if(this.settings.border.borders === 3){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "19px";
@@ -1622,7 +1628,7 @@ var DiscordRevamp = (() => {
 									elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								};
 							}
-							else if(this.settings.border.borders === 3){
+							else if(this.settings.border.borders === 4){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413351937998848/giphy_7.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "14px";
@@ -1630,7 +1636,7 @@ var DiscordRevamp = (() => {
 								elem.style.width = "52px";
 								elem.style.height = "52px";
 							}
-							else if(this.settings.border.borders === 4){
+							else if(this.settings.border.borders === 5){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811414329378471976/original.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "17px";
@@ -1654,7 +1660,7 @@ var DiscordRevamp = (() => {
 									vc[i].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								}
 							}
-							else if(this.settings.border.borders === 5){
+							else if(this.settings.border.borders === 6){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412156272214016/d26ab6e45a7d77b5f41704c31403d40c.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "17px";
@@ -1678,7 +1684,7 @@ var DiscordRevamp = (() => {
 									vc[i].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 								}
 							}
-							else if(this.settings.border.borders === 6){
+							else if(this.settings.border.borders === 7){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412588754763806/giphy_1.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "12px";
@@ -1686,7 +1692,7 @@ var DiscordRevamp = (() => {
 								elem.style.width = "52px";
 								elem.style.height = "52px";
 							}
-							else if(this.settings.border.borders === 7){
+							else if(this.settings.border.borders === 8){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413217963147274/giphy_3.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "16px";
@@ -1694,7 +1700,7 @@ var DiscordRevamp = (() => {
 								elem.style.width = "48px";
 								elem.style.height = "48px";
 							}
-							else if(this.settings.border.borders === 8){
+							else if(this.settings.border.borders === 9){
 								elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413250927362098/giphy_4.gif';
 								elem.style.position = "absolute";
 								elem.style.top = "16px";
@@ -1702,7 +1708,7 @@ var DiscordRevamp = (() => {
 								elem.style.width = "48px";
 								elem.style.height = "48px";
 							}
-							else if(this.settings.border.borders === 9){
+							else if(this.settings.border.borders === 10){
 								elem.src = 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/322330/46461aaea39b18a4a3da2e6d3cf253006f2d6193.png';
 								elem.style.position = "absolute";
 								elem.style.top = "16px";
@@ -1731,7 +1737,7 @@ var DiscordRevamp = (() => {
 							if(this.settings.border.self === true){
 								if(userID === ownID){
 									vc[i].children[0].appendChild(elem);
-									if(this.settings.border.borders === 9){
+									if(this.settings.border.borders === 10){
 										vc[i].children[0].children[0].style.borderRadius = "0";
 										vc[i].children[0].children[1].style.borderRadius = "0";
 									}
@@ -1742,7 +1748,7 @@ var DiscordRevamp = (() => {
 								for (var t = 0; t < ids.length; t++){
 									if(ids[t] === userID){
 										vc[i].children[0].appendChild(elem);
-										if(this.settings.border.borders === 9){
+										if(this.settings.border.borders === 10){
 											vc[i].children[0].children[0].style.borderRadius = "0";
 											vc[i].children[0].children[1].style.borderRadius = "0";
 										}
@@ -1751,7 +1757,7 @@ var DiscordRevamp = (() => {
 							}
 							else{
 								vc[i].children[0].appendChild(elem);
-								if(this.settings.border.borders === 9){
+								if(this.settings.border.borders === 10){
 									vc[i].children[0].children[0].style.borderRadius = "0";
 									vc[i].children[0].children[1].style.borderRadius = "0";
 								}
@@ -1785,7 +1791,7 @@ var DiscordRevamp = (() => {
 									
 										if(!bord ){
 											var elem = document.createElement("img");
-											if(this.settings.border.borders === 0){
+											if(this.settings.border.borders === 1){
 												elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "19px";
@@ -1796,7 +1802,7 @@ var DiscordRevamp = (() => {
 													elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 												};
 											}
-											else if(this.settings.border.borders === 1){
+											else if(this.settings.border.borders === 2){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "19px";
@@ -1807,7 +1813,7 @@ var DiscordRevamp = (() => {
 													elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 												};
 											}
-											else if(this.settings.border.borders === 2){
+											else if(this.settings.border.borders === 3){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "19px";
@@ -1818,7 +1824,7 @@ var DiscordRevamp = (() => {
 													elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 												};
 											}
-											else if(this.settings.border.borders === 3){
+											else if(this.settings.border.borders === 4){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413351937998848/giphy_7.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "14px";
@@ -1826,7 +1832,7 @@ var DiscordRevamp = (() => {
 												elem.style.width = "52px";
 												elem.style.height = "52px";
 											}
-											else if(this.settings.border.borders === 4){
+											else if(this.settings.border.borders === 5){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811414329378471976/original.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "17px";
@@ -1850,7 +1856,7 @@ var DiscordRevamp = (() => {
 													vc2[i].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 												};
 											}
-											else if(this.settings.border.borders === 5){
+											else if(this.settings.border.borders === 6){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412156272214016/d26ab6e45a7d77b5f41704c31403d40c.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "17px";
@@ -1874,7 +1880,7 @@ var DiscordRevamp = (() => {
 													vc2[i].children[0].children[0].style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 												};
 											}
-											else if(this.settings.border.borders === 6){
+											else if(this.settings.border.borders === 7){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412588754763806/giphy_1.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "12px";
@@ -1882,7 +1888,7 @@ var DiscordRevamp = (() => {
 												elem.style.width = "52px";
 												elem.style.height = "52px";
 											}
-											else if(this.settings.border.borders === 7){
+											else if(this.settings.border.borders === 8){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413217963147274/giphy_3.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "16px";
@@ -1890,7 +1896,7 @@ var DiscordRevamp = (() => {
 												elem.style.width = "48px";
 												elem.style.height = "48px";
 											}
-											else if(this.settings.border.borders === 8){
+											else if(this.settings.border.borders === 9){
 												elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413250927362098/giphy_4.gif';
 												elem.style.position = "absolute";
 												elem.style.top = "16px";
@@ -1898,7 +1904,7 @@ var DiscordRevamp = (() => {
 												elem.style.width = "48px";
 												elem.style.height = "48px";
 											}
-											else if(this.settings.border.borders === 9){
+											else if(this.settings.border.borders === 10){
 												elem.src = 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/322330/46461aaea39b18a4a3da2e6d3cf253006f2d6193.png';
 												elem.style.position = "absolute";
 												elem.style.top = "16px";
@@ -1927,7 +1933,7 @@ var DiscordRevamp = (() => {
 											if(this.settings.border.self === true){
 												if(userID === ownID){
 													vc2[i].children[0].appendChild(elem);
-													if(this.settings.border.borders === 9){
+													if(this.settings.border.borders === 10){
 														vc2[i].children[0].children[0].style.borderRadius = "0";
 													}
 												}
@@ -1937,7 +1943,7 @@ var DiscordRevamp = (() => {
 												for (var t = 0; t < ids.length; t++){
 													if(ids[t] === userID){
 														vc2[i].children[0].appendChild(elem);
-														if(this.settings.border.borders === 9){
+														if(this.settings.border.borders === 10){
 															vc2[i].children[0].children[0].style.borderRadius = "0";
 														}
 													}
@@ -1945,7 +1951,7 @@ var DiscordRevamp = (() => {
 											}
 											else{
 												vc2[i].children[0].appendChild(elem);
-												if(this.settings.border.borders === 9){
+												if(this.settings.border.borders === 10){
 													vc2[i].children[0].children[0].style.borderRadius = "0";
 												}
 											}
@@ -1971,7 +1977,7 @@ var DiscordRevamp = (() => {
 								}
 							}
 						}
-						if(this.settings.border.borders === 0){
+						if(this.settings.border.borders === 1){
 							elem.src = 'https://cdn.discordapp.com/attachments/756385334039937076/811308000018956288/oie_16194654PRRcsREe.gif';
 							elem.style.top = "-2px";
 							elem.style.left = "-2px";
@@ -1981,7 +1987,7 @@ var DiscordRevamp = (() => {
 								elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 							};
 						}
-						else if(this.settings.border.borders === 1){
+						else if(this.settings.border.borders === 2){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811107528867053578/ezgif-4-03fe153459c3.gif';
 							elem.style.top = "-2px";
 							elem.style.left = "-2px";
@@ -1991,7 +1997,7 @@ var DiscordRevamp = (() => {
 								elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 							};
 						}
-						else if(this.settings.border.borders === 2){
+						else if(this.settings.border.borders === 3){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811101527699226644/ezgif-4-2bb847a7784d.gif';
 							elem.style.top = "-2px";
 							elem.style.left = "-2px";
@@ -2001,14 +2007,14 @@ var DiscordRevamp = (() => {
 								elem.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 							};
 						}
-						else if(this.settings.border.borders === 3){
+						else if(this.settings.border.borders === 4){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413351937998848/giphy_7.gif';
 							elem.style.top = "-12px";
 							elem.style.left = "-12px";
 							elem.style.width = "104px";
 							elem.style.height = "104px";
 						}
-						else if(this.settings.border.borders === 4){
+						else if(this.settings.border.borders === 5){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811414329378471976/original.gif';
 							elem.style.position = "absolute";
 							elem.style.top = "-6px";
@@ -2019,7 +2025,7 @@ var DiscordRevamp = (() => {
 								st.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 							};	
 						}
-						else if(this.settings.border.borders === 5){
+						else if(this.settings.border.borders === 6){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412156272214016/d26ab6e45a7d77b5f41704c31403d40c.gif';
 							elem.style.position = "absolute";
 							elem.style.top = "-6px";
@@ -2030,28 +2036,28 @@ var DiscordRevamp = (() => {
 								st.style.boxShadow = `0 0 5px ${hex}, 0 0 15px ${hex}`;
 							};	
 						}
-						else if(this.settings.border.borders === 6){
+						else if(this.settings.border.borders === 7){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811412588754763806/giphy_1.gif';
 							elem.style.top = "-16px";
 							elem.style.left = "-12px";
 							elem.style.width = "104px";
 							elem.style.height = "104px";
 						}
-						else if(this.settings.border.borders === 7){
+						else if(this.settings.border.borders === 8){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413217963147274/giphy_3.gif';
 							elem.style.top = "-8px";
 							elem.style.left = "-8px";
 							elem.style.width = "96px";
 							elem.style.height = "96px";
 						}
-						else if(this.settings.border.borders === 8){
+						else if(this.settings.border.borders === 9){
 							elem.src = 'https://cdn.discordapp.com/attachments/572447902249648129/811413250927362098/giphy_4.gif';
 							elem.style.top = "-6px";
 							elem.style.left = "-8px";
 							elem.style.width = "96px";
 							elem.style.height = "96px";
 						}
-						else if(this.settings.border.borders === 9){
+						else if(this.settings.border.borders === 10){
 							elem.src = 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/items/322330/46461aaea39b18a4a3da2e6d3cf253006f2d6193.png';
 							elem.style.top = "-8px";
 							elem.style.left = "-8px";
@@ -2067,7 +2073,7 @@ var DiscordRevamp = (() => {
 						elem.setAttribute("class", "avatarUploaderInner-3UNxY3 da-avatarUploaderInner avatarUploaderInner-2EvNMg da-avatarUploaderInner");
 						if(!bord){
 							st.appendChild(elem);
-							if(this.settings.border.borders === 9){
+							if(this.settings.border.borders === 10){
 								st.style.borderRadius = "0";
 							}
 						}
