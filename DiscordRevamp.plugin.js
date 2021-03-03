@@ -13,7 +13,7 @@ var DiscordRevamp = (() => {
 			name: "Discord Revamp",
 			authors: [{name: "Fridy", github_username: "FridyGruder", discord_id: "333357946744602647"}, {name: "Twachx", github_username: "Twackx", discord_id: "155773083196588033"}],
 			description: "Revamps Discord and will add more features in the future.",
-			version: "0.3.2",
+			version: "0.3.3",
 			github: "https://github.com/FridyGruder/Discord-Revamp",
 			github_raw: "https://raw.githubusercontent.com/FridyGruder/Discord-Revamp/master/DiscordRevamp.plugin.js"
 		},
@@ -205,14 +205,9 @@ var DiscordRevamp = (() => {
         ],
 		changelog:[
 			{
-				"title": "Added",
-				"type": "added",
-				"items": ["Added settings to apply the custom background on everyone."]
-			},
-			{
 				"title": "Fixed",
 				"type": "fixed",
-				"items": ["Fixed the Steam setting not working on other languages than English.", "Fixed the default Discord color."]
+				"items": ["Fixed a major bug with borders not showing in chat."]
 			}
 		]
 	};
@@ -1113,7 +1108,13 @@ var DiscordRevamp = (() => {
 		
 					var x = document.getElementsByClassName("groupStart-23k01U");
 					for (var i = 0; i < x.length; i++) {
-						var userID = x[i].getAttribute("user_by_bdfdb");
+						var userID;
+						if(!x[i].getAttribute("user_by_bdfdb")){
+							userID = x[i].children[0].children[0].getAttribute("user_by_bdfdb");
+						}
+						else{
+							userID = x[i].getAttribute("user_by_bdfdb");
+						}
 						var bord = x[i].getAttribute("border");
 						var classes = x[i].classList;
 						var children = x[i].children;
@@ -1278,6 +1279,7 @@ var DiscordRevamp = (() => {
 									}
 									else if(this.settings.options.other){
 										var ids = this.settings.options.ids.replace(/ /g, "").split(",");
+										console.log(userID);
 										for (var t = 0; t < ids.length; t++){
 											if(ids[t] === userID){
 												x[i].appendChild(elem);
